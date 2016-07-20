@@ -21,10 +21,16 @@ var Developer = React.createClass({
 });
 
 var AddUserNameForm = React.createClass({
+  addGithubUser: function(e){
+    e.preventDefault();
+    var inputAddUsername = ReactDOM.findDOMNode(this.refs.usernameToAdd);
+    this.props.addDeveloperCard(inputAddUsername.value);    
+    inputAddUsername.value = '';
+  },
   render: function(){
     return (
-      <form>
-        <input placeholder="Github Username" />
+      <form onSubmit={this.addGithubUser}>
+        <input placeholder="Github Username" ref="usernameToAdd"/>
         <button type="submit">Adicionar Usuário</button>
       </form>
     )
@@ -32,8 +38,11 @@ var AddUserNameForm = React.createClass({
 })
 
 var App = React.createClass({
+  addDeveloperCard: function(usernameToAdd){
+    this.setState({usernames: this.state.usernames.concat(usernameToAdd)});
+  },
   getInitialState: function(){
-    return {usernames: ['rafael-miceli', 'ricardovalente']};
+    return {usernames: []};
   },
   render: function() {
     var userNameCards = this.state.usernames.map(function(username){
@@ -41,7 +50,7 @@ var App = React.createClass({
     });
     return (
         <div>
-          <AddUserNameForm />
+          <AddUserNameForm addDeveloperCard={this.addDeveloperCard}/>
           {userNameCards}
         </div>
     )
