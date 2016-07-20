@@ -1,6 +1,6 @@
 
 var Developer = React.createClass({
-  getInitialState(){
+  getInitialState: function(){
     return {};
   },
   componentDidMount: function() {
@@ -20,12 +20,29 @@ var Developer = React.createClass({
 
 });
 
+var AddUserNameForm = React.createClass({
+  render: function(){
+    return (
+      <form>
+        <input placeholder="Github Username" />
+        <button type="submit">Adicionar Usuário</button>
+      </form>
+    )
+  }
+})
+
 var App = React.createClass({
-  
+  getInitialState: function(){
+    return {usernames: ['rafael-miceli', 'ricardovalente']};
+  },
   render: function() {
-    return(
+    var userNameCards = this.state.usernames.map(function(username){
+      return (<Developer username={username}/>)
+    });
+    return (
         <div>
-          <Developer username="rafael-miceli"/>
+          <AddUserNameForm />
+          {userNameCards}
         </div>
     )
   }
