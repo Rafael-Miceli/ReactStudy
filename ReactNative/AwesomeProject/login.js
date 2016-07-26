@@ -11,6 +11,8 @@ import {
 
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import buffer from 'buffer';
+
 export class Login extends Component {
 
     constructor(props) {
@@ -44,14 +46,18 @@ export class Login extends Component {
     onLogin() {
         this.setState({showProgress: true}); 
 
-        fetch('https://api.github.com/search/repositories?q=SiteMjr')
-            .then((response) => {
-                return response.json();
-            })
-            .then((result) => {
-                console.log(result);
-                this.setState({showProgress: false}); 
-            });
+        var b = new buffer.Buffer('hello');
+        console.log(b.toString('base64'));
+
+        this.setState({showProgress: false});
+        // fetch('https://api.github.com/search/repositories?q=SiteMjr')
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((result) => {
+        //         console.log(result);
+        //         this.setState({showProgress: false}); 
+        //     });
     }
 }
 
