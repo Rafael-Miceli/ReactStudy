@@ -46,18 +46,38 @@ export class Login extends Component {
     onLogin() {
         this.setState({showProgress: true}); 
 
-        var b = new buffer.Buffer('hello');
-        console.log(b.toString('base64'));
+        var b = new buffer.Buffer(this.state.username + ':' + this.state.password);
+        var encodedAuth = b.toString('base64');
+        //console.log(b.toString('base64'));
 
-        this.setState({showProgress: false});
-        // fetch('https://api.github.com/search/repositories?q=SiteMjr')
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((result) => {
-        //         console.log(result);
-        //         this.setState({showProgress: false}); 
-        //     });
+        fetch('https://api.github.com/user', {
+            headers: {
+                'Authorization': 'Basic ' + encodedAuth
+            }
+        })
+        .then((response) => {
+            if (response.status >= 200 && response.status < 300)
+                return response;
+            
+            throw {
+                badCredentials: response.status == 401,
+                unknownError: response.status != 401
+            };  
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((result) => {
+            console.log(result);            
+        })
+        .catch((err) => {
+            //this.setState(err);
+            console.log('Logon failed ' + err);
+        })
+        .finally(() =>{
+            this.setState({showProgress: false});
+        })
+        
     }
 }
 
