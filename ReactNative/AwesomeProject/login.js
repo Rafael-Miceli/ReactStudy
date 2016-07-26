@@ -24,11 +24,18 @@ export class Login extends Component {
     }
 
     render() {
+        var errocCtrl = <View />
+
+        if (!this.state.success && this.state.badCredentials) {
+            errocCtrl = <Text>Wrong username or password</Text>; 
+        }
+
+        if (!this.state.success && this.state.unknownError) {
+            errocCtrl = <Text>Caught unexpected error</Text>;
+        } 
+
         return (
             <View>
-                <Text>
-                    Realize seu login
-                </Text>
                 <TextInput placeholder="Login" 
                 onChangeText={(text) => this.setState({username: text})} />
                 <TextInput placeholder="Password" secureTextEntry={true} 
@@ -38,8 +45,10 @@ export class Login extends Component {
                     <Text>Login</Text>
                 </TouchableHighlight>
 
+                {errocCtrl}
+
                 <Spinner visible={this.state.showProgress} />              
-            </View>                
+            </View>          
         )
     }
 
@@ -68,10 +77,11 @@ export class Login extends Component {
             return response.json();
         })
         .then((result) => {
-            console.log(result);            
+            console.log(result);
+            this.setState({success: true});            
         })
         .catch((err) => {
-            //this.setState(err);
+            this.setState(err);
             console.log('Logon failed ' + err);
         })
         .finally(() =>{
