@@ -9,6 +9,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 export class Login extends Component {
 
     constructor(props) {
@@ -20,15 +22,6 @@ export class Login extends Component {
     }
 
     render() {
-        if (this.state.showProgress) {
-            return this.renderLoadingView();
-        }
-        else {
-            return this.renderViewWithouLogin();
-        }
-    }
-
-    renderLoadingView() {
         return (
             <View>
                 <Text>
@@ -43,50 +36,22 @@ export class Login extends Component {
                     <Text>Login</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={this.onAct.bind(this)}>
-                    <Text>Activity</Text>
-                </TouchableHighlight>
-
-                <ActivityIndicator animating={true} size="large" />              
+                <Spinner visible={this.state.showProgress} />              
             </View>                
         )
     }
 
-    renderViewWithouLogin() {
-        return (
-            <View>
-                <Text>
-                    Realize seu login
-                </Text>
-                <TextInput placeholder="Login" 
-                onChangeText={(text) => this.setState({username: text})} />
-                <TextInput placeholder="Password" secureTextEntry={true} 
-                onChangeText={(text) => this.setState({password: text})} />
-
-                <TouchableHighlight onPress={this.onLogin.bind(this)}>
-                    <Text>Login</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight onPress={this.onAct.bind(this)}>
-                    <Text>Activity</Text>
-                </TouchableHighlight>              
-            </View>
-        )
-        
-    }
-
     onLogin() {
-        console.log("Ususario: ", this.state.username);
-        console.log("Senha: ", this.state.password);
-        console.log("Antes de tentar logar: ", this.state.showProgress);
         this.setState({showProgress: true}); 
-        console.log("Após tentar logar: ", this.state.showProgress);
-    }
 
-    onAct() {
-        console.log("Antes de tentar active: ", this.state.showProgress);
-        this.setState({showProgress: false}); 
-        console.log("Após tentar active: ", this.state.showProgress);
+        fetch('https://api.github.com/search/repositories?q=SiteMjr')
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                console.log(result);
+                this.setState({showProgress: false}); 
+            });
     }
 }
 
