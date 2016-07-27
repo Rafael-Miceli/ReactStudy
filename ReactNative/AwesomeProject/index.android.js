@@ -16,14 +16,30 @@ import { Login } from './login';
 
 class AwesomeProject extends Component {
 
+  constructor(props) {
+      super(props);
+
+      this.state = {
+          isLoggedIn: false 
+      }
+  } 
+
   render() {
-    return (      
-      <Login onLogin={this.onLogin}/>
-    );    
+    if (this.state.isLoggedIn) {
+      return (
+        <Text>You are loged in</Text> 
+      );
+    } 
+    else {
+      return (      
+        <Login onLogin={this.onLogin.bind(this)}/>
+      );
+    }        
   }
 
   onLogin() {
-    console.log("Succefully logged in!");
+    console.log("Succefully logged in!");    
+    this.setState({isLoggedIn: true}); 
   }
 }
 
