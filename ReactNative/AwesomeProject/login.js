@@ -28,7 +28,7 @@ export class Login extends Component {
         var errocCtrl = <View />
 
         if (!this.state.success && this.state.badCredentials) {
-            errocCtrl = <Text>Wrong username or password</Text>; 
+            errocCtrl = <Text>Wrong username or password, please try again</Text>; 
         }
 
         if (!this.state.success && this.state.unknownError) {
@@ -63,6 +63,10 @@ export class Login extends Component {
             this.setState(Object.assign({
                 showProgress: false
             }, result));
+
+            if(result.success && this.props.onLogin){
+                this.props.onLogin(); 
+            }
         });
         
     }

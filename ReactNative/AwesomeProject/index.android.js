@@ -15,10 +15,15 @@ import {
 import { Login } from './login';
 
 class AwesomeProject extends Component {
+
   render() {
     return (      
-      <Login />
-    );
+      <Login onLogin={this.onLogin}/>
+    );    
+  }
+
+  onLogin() {
+    console.log("Succefully logged in!");
   }
 }
 
