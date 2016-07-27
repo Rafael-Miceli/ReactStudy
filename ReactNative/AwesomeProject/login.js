@@ -12,6 +12,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import buffer from 'buffer';
+import { AuthService } from './AuthService';
 
 export class Login extends Component {
 
@@ -55,38 +56,14 @@ export class Login extends Component {
     onLogin() {
         this.setState({showProgress: true}); 
 
-        var b = new buffer.Buffer(this.state.username + ':' + this.state.password);
-        var encodedAuth = b.toString('base64');
-        //console.log(b.toString('base64'));
+        let authService = new AuthService();
 
-        fetch('https://api.github.com/user', {
-            headers: {
-                'Authorization': 'Basic ' + encodedAuth
-            }
-        })
-        .then((response) => {
-            if (response.status >= 200 && response.status < 300)
-                return response;
-            
-            throw {
-                badCredentials: response.status == 401,
-                unknownError: response.status != 401
-            };  
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((result) => {
-            console.log(result);
-            this.setState({success: true});            
-        })
-        .catch((err) => {
-            this.setState(err);
-            console.log('Logon failed ' + err);
-        })
-        .finally(() =>{
-            this.setState({showProgress: false});
-        })
+        authService.login({username: this.state.username, password: this.state.password}, 
+        (result) => {
+            this.setState(Object.assign({
+                showProgress: false
+            }, result));
+        });
         
     }
 }
