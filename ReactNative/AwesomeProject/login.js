@@ -5,8 +5,7 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableHighlight,
-  ActivityIndicator
+  TouchableHighlight
 } from 'react-native';
 
 import Spinner from 'react-native-loading-spinner-overlay';

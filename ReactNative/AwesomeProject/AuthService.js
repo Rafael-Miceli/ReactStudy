@@ -1,6 +1,6 @@
 import buffer from 'buffer';
 import {AsyncStorage} from 'react-native';
-
+import _ from 'lodash';
 
 const authKey = 'auth';
 const userKey = 'user';
@@ -17,7 +17,20 @@ export class AuthService {
                 return callback();
             }
 
+            var zippedObj = _.zipObject(val);
 
+            if(!zippedObj[authKey]) {
+                return callback();
+            }
+
+            var authInfo = {
+                header: {
+                    Authorization: 'Basic ' + zippedObj[authKey]
+                },
+                user: JSON.parse(zippedObj[userKey])
+            };
+
+            return callback(null, authInfo);
         });
     }
 

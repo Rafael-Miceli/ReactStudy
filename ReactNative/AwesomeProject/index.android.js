@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 
 import { Login } from './login';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { AuthService } from './AuthService';
 
 class AwesomeProject extends Component {
 
@@ -20,14 +22,36 @@ class AwesomeProject extends Component {
       super(props);
 
       this.state = {
-          isLoggedIn: false 
+          isLoggedIn: false,
+          checkingAuth: true 
       }
   } 
 
+  componentDidMount() {
+    var authService = new AuthService();
+    authService.getAuthInfo((err, auth) => {
+      this.setState({
+        checkingAuth: false,
+        isLoggedIn: auth != null
+      })
+    });
+  }
+
   render() {
+
+    if (this.state.checkingAuth) {
+      return (
+        <View>
+            <Spinner visible={true} />
+        </View>
+      );
+    } 
+
     if (this.state.isLoggedIn) {
       return (
-        <Text>You are loged in</Text> 
+        <View>
+          <Text>You are loged in</Text>
+        </View> 
       );
     } 
     else {
